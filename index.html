@@ -5,55 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Totem DPE-MA</title>
     <style>
-        :root {
-            --dpe-green: #009640;
-            --dpe-blue: #003366;
-            --text-light: #ffffff;
-        }
+        :root { --dpe-green: #009640; --dpe-blue: #003366; --text-light: #ffffff; }
 
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             background-color: #000; overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            user-select: none; 
+            user-select: none; /* Impede selecionar texto */
         }
 
+        /* --- VÍDEO --- */
         .video-background {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1;
-            display: flex; justify-content: center; align-items: center;
-            overflow: hidden;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
+            display: flex; justify-content: center; align-items: center; overflow: hidden;
         }
 
         .video-background iframe {
-            width: 100vw; 
-            height: 100vh;
-            border: none;
-            /* Começa permitindo clique (caso precise dar play manual) */
-            pointer-events: auto; 
-            transform: scale(1.35); 
+            width: 100vw; height: 100vh; border: none;
+            pointer-events: none; /* Mouse não interage com o YouTube */
+            transform: scale(1.35); /* Zoom para limpar a tela */
         }
 
-        /* O ESCUDO AGORA COMEÇA INVISÍVEL E DESATIVADO */
+        /* --- ESCUDO (Agora mais agressivo) --- */
         .click-shield {
-            position: absolute;
-            top: 0; left: 0; 
-            width: 100%; height: 100%;
-            z-index: 50; 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 50; /* Na frente de tudo */
             background: transparent;
-            /* O segredo: 'none' significa que o clique passa direto por ele */
-            pointer-events: none; 
-        }
-
-        /* Classe que será adicionada via Javascript depois de 10 segundos */
-        .click-shield.ativo {
-            /* Agora sim ele bloqueia o clique no YouTube */
+            
+            /* COMEÇA BLOQUEANDO TUDO (pointer-events: auto).
+               Como configuramos o Firefox para tocar sozinho, 
+               não precisamos deixar o usuário clicar no play. */
             pointer-events: auto; 
-            /* Opcional: Borda vermelha fina apenas para você testar se ativou (remova depois) */
-            /* border: 2px solid red; */
         }
 
+        /* --- VISUAIS --- */
         .border-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             box-sizing: border-box; border: 15px solid var(--dpe-green);
@@ -69,11 +54,7 @@
             pointer-events: none; 
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
         
         @media (max-width: 768px) {
             .cta-overlay { font-size: 2rem; padding: 15px 0; }
@@ -92,20 +73,10 @@
         </iframe>
     </div>
 
-    <div id="meuEscudo" class="click-shield"></div>
+    <div class="click-shield"></div>
 
     <div class="border-overlay"></div>
     <div class="cta-overlay">Pressione para retirar sua senha</div>
-
-    <script>
-        // LÓGICA DE SEGURANÇA
-        // Aguarda 10 segundos (10000 ms) após a página abrir
-        setTimeout(function() {
-            var escudo = document.getElementById('meuEscudo');
-            escudo.classList.add('ativo');
-            console.log("Escudo ativado! O vídeo não pode mais ser pausado por clique.");
-        }, 10000); 
-    </script>
 
 </body>
 </html>

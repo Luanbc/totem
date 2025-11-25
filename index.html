@@ -5,95 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Totem DPE-MA</title>
     <style>
-        /* --- CORES INSTITUCIONAIS DPE-MA --- */
         :root {
             --dpe-green: #009640;
             --dpe-blue: #003366;
             --text-light: #ffffff;
         }
 
-        /* Configuração de Tela Cheia e Reset */
         body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            background-color: #000; /* Fundo preto */
-            overflow: hidden; /* Remove barras de rolagem */
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: #000; overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* CAMADA 1: O Vídeo de Fundo */
+        /* --- TRUQUE DO ZOOM PARA ESCONDER INTERFACE DO YOUTUBE --- */
         .video-background {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1;
+            /* Flexbox para garantir que o zoom seja centralizado */
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden;
         }
 
-        /* Configuração do Iframe (Player) */
         .video-background iframe {
-            width: 100vw;
+            width: 100vw; 
             height: 100vh;
             border: none;
-            /* pointer-events: none; -> IMPORTANTE: 
-               Isso impede que o mouse interaja com o YouTube.
-               O clique "atravessa" o vídeo e vai para o sistema (AutoHotKey). */
-            pointer-events: none; 
+            pointer-events: none; /* Impede passar mouse e mostrar barra de tempo */
+            
+            /* O SEGREDO ESTÁ AQUI: */
+            transform: scale(1.35); /* Aumenta 35% para jogar bordas para fora */
         }
 
-        /* CAMADA 2: A Moldura Verde */
+        /* Moldura e Textos */
         .border-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            box-sizing: border-box; /* Garante borda interna */
-            border: 15px solid var(--dpe-green);
-            pointer-events: none;
-            z-index: 10;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            box-sizing: border-box; border: 15px solid var(--dpe-green);
+            pointer-events: none; z-index: 10;
         }
 
-        /* CAMADA 3: Texto de Chamada (Rodapé) */
         .cta-overlay {
-            position: absolute;
-            bottom: 8%;
-            left: 0;
-            width: 100%;
-            z-index: 20;
-            
-            background: rgba(0, 51, 102, 0.9); /* Azul DPE Transparente */
-            border-top: 4px solid var(--dpe-green);
-            border-bottom: 4px solid var(--dpe-green);
-            
-            color: var(--text-light);
-            text-align: center;
-            font-size: 3.5rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            padding: 25px 0;
-            letter-spacing: 2px;
-            
-            /* Animação Pulsante */
+            position: absolute; bottom: 8%; left: 0; width: 100%; z-index: 20;
+            background: rgba(0, 51, 102, 0.9); border-top: 4px solid var(--dpe-green); border-bottom: 4px solid var(--dpe-green);
+            color: var(--text-light); text-align: center; font-size: 3.5rem; font-weight: 800;
+            text-transform: uppercase; padding: 25px 0; letter-spacing: 2px;
             animation: pulse 2.5s infinite;
         }
 
         @keyframes pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.02); filter: brightness(1.1); }
+            50% { transform: scale(1.02); }
             100% { transform: scale(1); }
         }
         
-        /* Ajuste para telas menores */
-        @media (max-height: 768px) {
-            .cta-overlay {
-                font-size: 2.5rem;
-                padding: 15px 0;
-                bottom: 5%;
-            }
+        /* Responsividade para telas menores */
+        @media (max-width: 768px) {
+            .cta-overlay { font-size: 2rem; padding: 15px 0; }
+            .border-overlay { border-width: 8px; }
+            /* No celular, talvez precise de menos zoom */
+            .video-background iframe { transform: scale(1.45); } 
         }
     </style>
 </head>
@@ -101,18 +71,14 @@
 
     <div class="video-background">
         <iframe 
-            src="https://www.youtube-nocookie.com/embed/Z7MyL6UL0PU?list=PLsR1-uBqD718iATLdD10Gido8Kb3PXftO&autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&origin=http://localhost" 
-            title="Totem Video Player"
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            src="https://www.youtube.com/embed/Z7MyL6UL0PU?list=PLsR1-uBqD718iATLdD10Gido8Kb3PXftO&autoplay=1&mute=0&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1" 
+            allow="autoplay; encrypted-media" 
             allowfullscreen>
         </iframe>
     </div>
 
     <div class="border-overlay"></div>
-    <div class="cta-overlay">
-        Pressione para retirar sua senha
-    </div>
+    <div class="cta-overlay">Pressione para retirar sua senha</div>
 
 </body>
 </html>

@@ -17,12 +17,10 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* --- TRUQUE DO ZOOM PARA ESCONDER INTERFACE DO YOUTUBE --- */
         .video-background {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1;
-            /* Flexbox para garantir que o zoom seja centralizado */
             display: flex; justify-content: center; align-items: center;
             overflow: hidden;
         }
@@ -31,17 +29,21 @@
             width: 100vw; 
             height: 100vh;
             border: none;
-            pointer-events: none; /* Impede passar mouse e mostrar barra de tempo */
             
-            /* O SEGREDO ESTÁ AQUI: */
-            transform: scale(1.35); /* Aumenta 35% para jogar bordas para fora */
+            /* CORREÇÃO PARA O FIREFOX:
+               'auto' permite que você clique no Play caso o navegador pause o vídeo. */
+            pointer-events: auto; 
+            
+            /* ZOOM:
+               Mantemos o zoom para esconder a barra de título e logo do YouTube */
+            transform: scale(1.35); 
         }
 
-        /* Moldura e Textos */
         .border-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             box-sizing: border-box; border: 15px solid var(--dpe-green);
-            pointer-events: none; z-index: 10;
+            pointer-events: none; /* Deixa o clique passar pela borda */
+            z-index: 10;
         }
 
         .cta-overlay {
@@ -50,6 +52,9 @@
             color: var(--text-light); text-align: center; font-size: 3.5rem; font-weight: 800;
             text-transform: uppercase; padding: 25px 0; letter-spacing: 2px;
             animation: pulse 2.5s infinite;
+            
+            /* Deixa o clique passar pelo texto para acertar o vídeo atrás, se precisar dar Play */
+            pointer-events: none; 
         }
 
         @keyframes pulse {
@@ -58,11 +63,9 @@
             100% { transform: scale(1); }
         }
         
-        /* Responsividade para telas menores */
         @media (max-width: 768px) {
             .cta-overlay { font-size: 2rem; padding: 15px 0; }
             .border-overlay { border-width: 8px; }
-            /* No celular, talvez precise de menos zoom */
             .video-background iframe { transform: scale(1.45); } 
         }
     </style>

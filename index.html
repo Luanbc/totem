@@ -15,12 +15,9 @@
             margin: 0; padding: 0; width: 100%; height: 100%;
             background-color: #000; overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            
-            /* Impede seleção de texto (deixa parecendo um app nativo) */
             user-select: none; 
         }
 
-        /* --- CAMADA 1: VÍDEO (Fundo) --- */
         .video-background {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -33,34 +30,34 @@
             width: 100vw; 
             height: 100vh;
             border: none;
-            
-            /* PROTEÇÃO DUPLA:
-               1. pointer-events: none impede o mouse de interagir com o vídeo.
-               2. O 'Escudo' (criado abaixo) garante que o clique não passe. */
-            pointer-events: none; 
-            
-            /* Zoom para esconder interface do YouTube */
+            /* Começa permitindo clique (caso precise dar play manual) */
+            pointer-events: auto; 
             transform: scale(1.35); 
         }
 
-        /* --- CAMADA 2: ESCUDO INVISÍVEL (A SOLUÇÃO) --- */
+        /* O ESCUDO AGORA COMEÇA INVISÍVEL E DESATIVADO */
         .click-shield {
             position: absolute;
             top: 0; left: 0; 
             width: 100%; height: 100%;
-            z-index: 50; /* Fica NA FRENTE de tudo */
-            background: transparent; /* Invisível */
-            
-            /* Garante que o clique bata aqui e morra aqui, sem ir pro YouTube */
-            pointer-events: auto; 
+            z-index: 50; 
+            background: transparent;
+            /* O segredo: 'none' significa que o clique passa direto por ele */
+            pointer-events: none; 
         }
 
-        /* --- CAMADA 3: ELEMENTOS VISUAIS (Apenas decoração agora) --- */
+        /* Classe que será adicionada via Javascript depois de 10 segundos */
+        .click-shield.ativo {
+            /* Agora sim ele bloqueia o clique no YouTube */
+            pointer-events: auto; 
+            /* Opcional: Borda vermelha fina apenas para você testar se ativou (remova depois) */
+            /* border: 2px solid red; */
+        }
+
         .border-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             box-sizing: border-box; border: 15px solid var(--dpe-green);
-            pointer-events: none; /* Clique passa direto */
-            z-index: 10;
+            pointer-events: none; z-index: 10;
         }
 
         .cta-overlay {
@@ -69,7 +66,7 @@
             color: var(--text-light); text-align: center; font-size: 3.5rem; font-weight: 800;
             text-transform: uppercase; padding: 25px 0; letter-spacing: 2px;
             animation: pulse 2.5s infinite;
-            pointer-events: none; /* Clique passa direto */
+            pointer-events: none; 
         }
 
         @keyframes pulse {
@@ -95,10 +92,20 @@
         </iframe>
     </div>
 
-    <div class="click-shield"></div>
+    <div id="meuEscudo" class="click-shield"></div>
 
     <div class="border-overlay"></div>
     <div class="cta-overlay">Pressione para retirar sua senha</div>
+
+    <script>
+        // LÓGICA DE SEGURANÇA
+        // Aguarda 10 segundos (10000 ms) após a página abrir
+        setTimeout(function() {
+            var escudo = document.getElementById('meuEscudo');
+            escudo.classList.add('ativo');
+            console.log("Escudo ativado! O vídeo não pode mais ser pausado por clique.");
+        }, 10000); 
+    </script>
 
 </body>
 </html>

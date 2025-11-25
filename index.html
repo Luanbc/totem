@@ -15,8 +15,12 @@
             margin: 0; padding: 0; width: 100%; height: 100%;
             background-color: #000; overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            
+            /* Impede seleção de texto (deixa parecendo um app nativo) */
+            user-select: none; 
         }
 
+        /* --- CAMADA 1: VÍDEO (Fundo) --- */
         .video-background {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -30,19 +34,32 @@
             height: 100vh;
             border: none;
             
-            /* CORREÇÃO PARA O FIREFOX:
-               'auto' permite que você clique no Play caso o navegador pause o vídeo. */
-            pointer-events: auto; 
+            /* PROTEÇÃO DUPLA:
+               1. pointer-events: none impede o mouse de interagir com o vídeo.
+               2. O 'Escudo' (criado abaixo) garante que o clique não passe. */
+            pointer-events: none; 
             
-            /* ZOOM:
-               Mantemos o zoom para esconder a barra de título e logo do YouTube */
+            /* Zoom para esconder interface do YouTube */
             transform: scale(1.35); 
         }
 
+        /* --- CAMADA 2: ESCUDO INVISÍVEL (A SOLUÇÃO) --- */
+        .click-shield {
+            position: absolute;
+            top: 0; left: 0; 
+            width: 100%; height: 100%;
+            z-index: 50; /* Fica NA FRENTE de tudo */
+            background: transparent; /* Invisível */
+            
+            /* Garante que o clique bata aqui e morra aqui, sem ir pro YouTube */
+            pointer-events: auto; 
+        }
+
+        /* --- CAMADA 3: ELEMENTOS VISUAIS (Apenas decoração agora) --- */
         .border-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             box-sizing: border-box; border: 15px solid var(--dpe-green);
-            pointer-events: none; /* Deixa o clique passar pela borda */
+            pointer-events: none; /* Clique passa direto */
             z-index: 10;
         }
 
@@ -52,9 +69,7 @@
             color: var(--text-light); text-align: center; font-size: 3.5rem; font-weight: 800;
             text-transform: uppercase; padding: 25px 0; letter-spacing: 2px;
             animation: pulse 2.5s infinite;
-            
-            /* Deixa o clique passar pelo texto para acertar o vídeo atrás, se precisar dar Play */
-            pointer-events: none; 
+            pointer-events: none; /* Clique passa direto */
         }
 
         @keyframes pulse {
@@ -79,6 +94,8 @@
             allowfullscreen>
         </iframe>
     </div>
+
+    <div class="click-shield"></div>
 
     <div class="border-overlay"></div>
     <div class="cta-overlay">Pressione para retirar sua senha</div>

@@ -6,77 +6,100 @@
     <title>Totem DPE-MA</title>
     <style>
         :root { --dpe-green: #009640; --dpe-blue: #003366; --text-light: #ffffff; }
-
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: #000; overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            user-select: none; /* Impede selecionar texto */
-        }
-
-        /* --- VÍDEO --- */
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #000; overflow: hidden; font-family: 'Segoe UI', sans-serif; user-select: none; }
+        
         .video-background {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
             display: flex; justify-content: center; align-items: center; overflow: hidden;
+            pointer-events: auto; /* Permite clique inicial se precisar */
+        }
+        /* O Player será injetado aqui pelo JS */
+        #player {
+            width: 100vw; height: 100vh;
+            transform: scale(1.35); /* Zoom para esconder bordas */
         }
 
-        .video-background iframe {
-            width: 100vw; height: 100vh; border: none;
-            pointer-events: none; /* Mouse não interage com o YouTube */
-            transform: scale(1.35); /* Zoom para limpar a tela */
-        }
-
-        /* --- ESCUDO (Agora mais agressivo) --- */
+        /* Escudo contra cliques (sempre ativo) */
         .click-shield {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 50; /* Na frente de tudo */
-            background: transparent;
-            
-            /* COMEÇA BLOQUEANDO TUDO (pointer-events: auto).
-               Como configuramos o Firefox para tocar sozinho, 
-               não precisamos deixar o usuário clicar no play. */
-            pointer-events: auto; 
+            z-index: 50; background: transparent; pointer-events: auto;
         }
 
-        /* --- VISUAIS --- */
         .border-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            box-sizing: border-box; border: 15px solid var(--dpe-green);
-            pointer-events: none; z-index: 10;
+            box-sizing: border-box; border: 15px solid var(--dpe-green); pointer-events: none; z-index: 10;
         }
-
         .cta-overlay {
             position: absolute; bottom: 8%; left: 0; width: 100%; z-index: 20;
             background: rgba(0, 51, 102, 0.9); border-top: 4px solid var(--dpe-green); border-bottom: 4px solid var(--dpe-green);
             color: var(--text-light); text-align: center; font-size: 3.5rem; font-weight: 800;
             text-transform: uppercase; padding: 25px 0; letter-spacing: 2px;
-            animation: pulse 2.5s infinite;
-            pointer-events: none; 
+            animation: pulse 2.5s infinite; pointer-events: none;
         }
-
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
-        
-        @media (max-width: 768px) {
-            .cta-overlay { font-size: 2rem; padding: 15px 0; }
-            .border-overlay { border-width: 8px; }
-            .video-background iframe { transform: scale(1.45); } 
-        }
     </style>
 </head>
 <body>
 
     <div class="video-background">
-        <iframe 
-            src="https://www.youtube.com/embed/Z7MyL6UL0PU?list=PLsR1-uBqD718iATLdD10Gido8Kb3PXftO&autoplay=1&mute=0&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1" 
-            allow="autoplay; encrypted-media" 
-            allowfullscreen>
-        </iframe>
+        <div id="player"></div>
     </div>
-
     <div class="click-shield"></div>
-
     <div class="border-overlay"></div>
     <div class="cta-overlay">Pressione para retirar sua senha</div>
 
+    <script>
+        // --- CONFIGURAÇÃO ---
+        const VIDEO_ID = 'Z7MyL6UL0PU';
+        const PLAYLIST_ID = 'PLsR1-uBqD718iATLdD10Gido8Kb3PXftO';
+        const VOLUME_ATIVO = 100; // Volume quando o vídeo está na tela (0 a 100)
+        const VOLUME_OCULTO = 0;  // Volume quando está em atendimento (0 a 100)
+        // --------------------
+
+        var player;
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '100%', width: '100%',
+                videoId: VIDEO_ID,
+                playerVars: {
+                    'listType': 'playlist', 'list': PLAYLIST_ID,
+                    'autoplay': 1, 'controls': 0, 'showinfo': 0, 
+                    'rel': 0, 'loop': 1, 'modestbranding': 1,
+                    'mute': 0 // Tenta começar com som
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            event.target.setVolume(VOLUME_ATIVO);
+            event.target.playVideo();
+        }
+
+        // --- A MÁGICA DO VOLUME ---
+        // O navegador avisa: "Ei, minimizam você!" ou "Ei, você apareceu!"
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                // Se a janela foi minimizada ou escondida
+                if(player && player.setVolume) {
+                    console.log("Modo Atendimento: Baixando volume.");
+                    player.setVolume(VOLUME_OCULTO);
+                }
+            } else {
+                // Se a janela voltou para frente
+                if(player && player.setVolume) {
+                    console.log("Modo Descanso: Aumentando volume.");
+                    player.setVolume(VOLUME_ATIVO);
+                }
+            }
+        });
+    </script>
 </body>
 </html>

@@ -22,7 +22,7 @@
             width: 100%; height: 100%; 
             background-color: var(--bg-color); 
             font-family: 'Montserrat', sans-serif; 
-            overflow: hidden; /* Remove barras de rolagem */
+            overflow: hidden; 
             user-select: none;
             display: flex;
             flex-direction: column;
@@ -30,7 +30,7 @@
 
         /* --- 1. CABEÇALHO (15% da Altura) --- */
         .header {
-            height: 15vh; /* 15% da altura da tela */
+            height: 15vh; 
             background: linear-gradient(180deg, var(--dpe-blue) 0%, var(--dpe-blue-dark) 100%);
             display: flex;
             flex-direction: column;
@@ -43,7 +43,7 @@
         }
         
         .header h2 {
-            font-size: 2.5vh; /* Tamanho relativo à altura */
+            font-size: 2.5vh; 
             font-weight: 500;
             letter-spacing: 3px;
             color: rgba(255,255,255,0.9);
@@ -52,7 +52,7 @@
         }
         
         .header h1 {
-            font-size: 4.5vh; /* Bem grande para ler de longe */
+            font-size: 4.5vh; 
             font-weight: 900;
             color: var(--text-white);
             text-transform: uppercase;
@@ -63,7 +63,7 @@
 
         /* --- 2. ÁREA DO VÍDEO (55% da Altura) --- */
         .video-wrapper {
-            height: 55vh; /* 55% da tela */
+            height: 55vh; 
             width: 100%;
             background: #000;
             position: relative;
@@ -73,7 +73,6 @@
             align-items: center;
         }
 
-        /* Moldura interna para dar acabamento */
         .video-frame {
             width: 92%;
             height: 92%;
@@ -82,22 +81,29 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.5);
             border: 3px solid rgba(255,255,255,0.1);
             background: #000;
+            position: relative; /* Necessário para o iframe absoluto */
         }
         
         .video-frame iframe {
-            width: 100vw;
-            height: 100vh;
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             border: none;
-            /* O PULO DO GATO PARA 1080x1920: */
-            /* Como o vídeo é horizontal, damos zoom para preencher a caixa vertical */
-            transform: scale(1.8); 
-            transform-origin: center center;
+            
+            /* --- AJUSTE DE CENTRALIZAÇÃO AQUI --- */
+            /* Aumentei um pouco o scale para 2.0 */
+            transform: scale(2.0); 
+            
+            /* PULO DO GATO: Define o ponto focal do zoom mais para cima */
+            /* 'center 30%' significa: centralizado horizontalmente, mas a 30% do topo */
+            transform-origin: center 30%;
+            
             pointer-events: none;
         }
 
         /* --- 3. RODAPÉ DE AÇÃO (30% da Altura) --- */
         .footer {
-            height: 30vh; /* 30% da tela - Área nobre de toque */
+            height: 30vh; 
             background: #ffffff;
             display: flex;
             flex-direction: column;
@@ -110,7 +116,7 @@
 
         .cta-button {
             width: 85%;
-            height: 55%; /* Ocupa mais da metade do rodapé */
+            height: 55%; 
             background: linear-gradient(135deg, var(--dpe-green) 0%, var(--dpe-green-light) 100%);
             color: white;
             border-radius: 30px;
@@ -128,13 +134,12 @@
         .cta-text { font-size: 5vh; font-weight: 800; text-transform: uppercase; line-height: 1; }
         .cta-sub { font-size: 2vh; font-weight: 600; margin-top: 2vh; color: var(--dpe-blue); opacity: 0.8; }
 
-        /* Decoração final */
         .brand-bar {
             position: absolute; bottom: 0; width: 100%; height: 2vh;
             background: var(--dpe-blue);
         }
 
-        /* --- ESCUDO DE CLIQUE (COBRE TUDO) --- */
+        /* --- ESCUDO DE CLIQUE --- */
         .click-shield {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 99; background: transparent; cursor: pointer;

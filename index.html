@@ -16,11 +16,11 @@
             --text-white: #ffffff;
         }
 
-        /* RESET E ESTRUTURA BÁSICA */
+        /* RESET */
         body, html { 
             margin: 0; padding: 0; 
             width: 100%; height: 100%; 
-            background-color: var(--bg-color); 
+            background-color: var(--dpe-blue-dark); /* Fundo base escuro para combinar com vídeo */
             font-family: 'Montserrat', sans-serif; 
             overflow: hidden; 
             user-select: none;
@@ -28,7 +28,7 @@
             flex-direction: column;
         }
 
-        /* --- 1. CABEÇALHO (15% da Altura) --- */
+        /* --- 1. CABEÇALHO (15%) --- */
         .header {
             height: 15vh; 
             background: linear-gradient(180deg, var(--dpe-blue) 0%, var(--dpe-blue-dark) 100%);
@@ -37,71 +37,59 @@
             justify-content: center;
             align-items: center;
             border-bottom: 6px solid var(--dpe-green);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            z-index: 20;
-            position: relative;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            z-index: 30;
         }
         
         .header h2 {
-            font-size: 2.5vh; 
+            font-size: 2vh; 
             font-weight: 500;
-            letter-spacing: 3px;
-            color: rgba(255,255,255,0.9);
+            letter-spacing: 4px;
+            color: rgba(255,255,255,0.8);
             margin: 0;
             text-transform: uppercase;
         }
         
         .header h1 {
-            font-size: 4.5vh; 
+            font-size: 4vh; 
             font-weight: 900;
             color: var(--text-white);
             text-transform: uppercase;
             margin: 5px 0 0 0;
             line-height: 1;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
-        /* --- 2. ÁREA DO VÍDEO (55% da Altura) --- */
+        /* --- 2. ÁREA DO VÍDEO (55%) --- */
         .video-wrapper {
             height: 55vh; 
             width: 100%;
-            background: #000;
+            /* Fundo Azul Escuro Institucional para as sobras */
+            background: var(--dpe-blue-dark);
             position: relative;
-            overflow: hidden;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            align-items: center; /* Centraliza verticalmente */
+            justify-content: center; /* Centraliza horizontalmente */
         }
 
+        /* Moldura do Vídeo */
         .video-frame {
-            width: 92%;
-            height: 92%;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-            border: 3px solid rgba(255,255,255,0.1);
+            width: 100%; /* Ocupa toda a largura */
+            /* A altura será automática baseada no aspecto 16:9 do vídeo */
+            aspect-ratio: 16 / 9; 
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
             background: #000;
-            position: relative; /* Necessário para o iframe absoluto */
+            position: relative;
         }
         
         .video-frame iframe {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            width: 100%;
+            height: 100%;
             border: none;
-            
-            /* --- AJUSTE DE CENTRALIZAÇÃO AQUI --- */
-            /* Aumentei um pouco o scale para 2.0 */
-            transform: scale(2.0); 
-            
-            /* PULO DO GATO: Define o ponto focal do zoom mais para cima */
-            /* 'center 30%' significa: centralizado horizontalmente, mas a 30% do topo */
-            transform-origin: center 30%;
-            
-            pointer-events: none;
+            pointer-events: none; /* Impede clique no botão pause/play */
         }
 
-        /* --- 3. RODAPÉ DE AÇÃO (30% da Altura) --- */
+        /* --- 3. RODAPÉ (30%) --- */
         .footer {
             height: 30vh; 
             background: #ffffff;
@@ -110,8 +98,8 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            z-index: 20;
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+            z-index: 30;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
         }
 
         .cta-button {
@@ -127,19 +115,19 @@
             box-shadow: 0 15px 30px rgba(0, 150, 64, 0.4);
             animation: pulse-green 2.5s infinite;
             border: 4px solid rgba(255,255,255,0.3);
-            cursor: pointer;
+            text-align: center;
         }
 
-        .cta-icon { font-size: 6vh; margin-bottom: 1vh; }
-        .cta-text { font-size: 5vh; font-weight: 800; text-transform: uppercase; line-height: 1; }
-        .cta-sub { font-size: 2vh; font-weight: 600; margin-top: 2vh; color: var(--dpe-blue); opacity: 0.8; }
+        .cta-icon { font-size: 5vh; margin-bottom: 1vh; }
+        .cta-text { font-size: 4vh; font-weight: 800; text-transform: uppercase; line-height: 1; }
+        .cta-sub { font-size: 1.8vh; font-weight: 600; margin-top: 2vh; color: var(--dpe-blue); opacity: 0.8; }
 
         .brand-bar {
             position: absolute; bottom: 0; width: 100%; height: 2vh;
             background: var(--dpe-blue);
         }
 
-        /* --- ESCUDO DE CLIQUE --- */
+        /* --- ESCUDO --- */
         .click-shield {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 99; background: transparent; cursor: pointer;
@@ -177,7 +165,6 @@
     <div class="click-shield"></div>
 
     <script>
-        // CONFIGURAÇÃO YOUTUBE
         const VIDEO_ID = 'Z7MyL6UL0PU';
         const PLAYLIST_ID = 'PLsR1-uBqD718iATLdD10Gido8Kb3PXftO';
         const VOLUME_ATIVO = 100;

@@ -101,25 +101,30 @@
             height: 25vh; 
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Centraliza o botão na área que sobra */
+            justify-content: center;
             align-items: center;
             z-index: 20;
             position: relative;
-            padding-bottom: 4vh; /* Dá um espaço para o letreiro não encostar no botão */
+            padding-bottom: 4vh; 
         }
 
+        /* CORREÇÃO AQUI: Adicionado 'justify-content: center' */
         .cta-button {
+            width: 80%; /* Garante largura fixa para centralizar bem */
             background: linear-gradient(135deg, var(--dpe-green) 0%, var(--dpe-green-hover) 100%);
             color: white;
-            padding: 3vh 8vh;
+            padding: 3vh 0; /* Padding vertical apenas, largura definida pelo width */
             border-radius: 50px;
             font-size: 4vh;
             font-weight: 800;
             text-transform: uppercase;
             box-shadow: 0 10px 25px rgba(0, 150, 64, 0.4);
             animation: pulse-green 2s infinite;
+            
             display: flex;
-            align-items: center;
+            align-items: center;    /* Centraliza Verticalmente */
+            justify-content: center; /* Centraliza Horizontalmente (CORREÇÃO) */
+            
             gap: 20px;
             cursor: pointer;
             border: 3px solid white;
@@ -133,7 +138,7 @@
             opacity: 0.6;
         }
 
-        /* --- LETREIRO NO RODAPÉ (Tamanho Reduzido) --- */
+        /* --- LETREIRO --- */
         .marquee-footer {
             position: absolute;
             bottom: 0;
@@ -141,7 +146,7 @@
             width: 100%;
             background-color: var(--dpe-blue);
             border-top: 3px solid var(--dpe-green);
-            padding: 0.6vh 0; /* REDUZIDO: Mais fino */
+            padding: 0.8vh 0; 
             overflow: hidden;
             white-space: nowrap;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
@@ -150,12 +155,12 @@
         .marquee-content {
             display: inline-block;
             color: #ffffff;
-            font-size: 2vh; /* REDUZIDO: Fonte menor */
+            font-size: 2vh; 
             font-weight: 600;
             font-style: italic;
             text-transform: uppercase;
             letter-spacing: 2px;
-            animation: scroll-left 30s linear infinite; /* Mais lento para leitura fácil */
+            animation: scroll-left 30s linear infinite; 
             padding-left: 100%;
         }
         
@@ -179,12 +184,12 @@
 <body>
 
     <div class="header">
-        <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/img/logo_def_mobile.svg" class="header-logo" alt="Logo DPE-MA">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Bras%C3%A3o_do_Maranh%C3%A3o.svg/1200px-Bras%C3%A3o_do_Maranh%C3%A3o.svg.png" class="header-logo" alt="Logo DPE-MA">
     </div>
 
     <div class="main-container">
         <div class="video-card">
-            <div class="video-label">    </div>
+            <div class="video-label">Institucional</div>
             <div class="video-frame">
                 <div id="player"></div>
             </div>
@@ -200,7 +205,7 @@
 
         <div class="marquee-footer">
             <div class="marquee-content">
-                "Você não está sozinho" &nbsp;&nbsp;&nbsp; • &nbsp;&nbsp;&nbsp; Garantia de Direitos • &nbsp;&nbsp;&nbsp; "Você não está sozinho" &nbsp;&nbsp;&nbsp; • &nbsp;&nbsp;&nbsp; Garantia de Direitos
+                "Você não está sozinho" &nbsp;&nbsp;&nbsp; • &nbsp;&nbsp;&nbsp; Defensoria Pública do Maranhão &nbsp;&nbsp;&nbsp; • &nbsp;&nbsp;&nbsp; "Você não está sozinho" &nbsp;&nbsp;&nbsp; • &nbsp;&nbsp;&nbsp; Garantia de Direitos
             </div>
         </div>
     </div>

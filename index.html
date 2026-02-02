@@ -46,19 +46,17 @@
             display: block;
         }
 
-        /* --- BOTÃO REFRESH (SUPER ESCONDIDO) --- */
+        /* --- BOTÃO REFRESH --- */
         .refresh-btn {
             position: fixed; 
             top: 2vh;
             right: 2vh;
             width: 6vh; 
             height: 6vh;
-            /* NOVOS VALORES DE TRANSPARÊNCIA MÁXIMA */
-            background-color: rgba(255, 255, 255, 0.05); /* 5% de opacidade */
-            border: 1px solid rgba(255, 255, 255, 0.15); /* Borda muito sutil */
-            color: rgba(255, 255, 255, 0.3); /* Ícone transparente */
-            backdrop-filter: blur(2px); /* Efeito de vidro sutil */
-            /* -------------------------------------- */
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(2px);
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -69,7 +67,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Ao passar o mouse/dedo ele fica um pouco mais visível */
         .refresh-btn:hover {
             background-color: rgba(255,255,255,0.2);
             color: rgba(255, 255, 255, 0.8);
@@ -259,7 +256,7 @@
 
     <div class="main-container">
         <div class="video-card">
-            <div class="video-label"> </div>
+            <div class="video-label">Institucional</div>
             <div class="video-frame">
                 <div id="player"></div>
             </div>
@@ -267,7 +264,7 @@
     </div>
 
     <div class="footer">
-        <div class="cta-button">
+        <div class="cta-button" onclick="abrirSGA()">
             <span>👆</span>
             <span>Retirar Senha</span>
         </div>
@@ -288,6 +285,17 @@
             setTimeout(function() {
                 location.reload(true);
             }, 1000);
+        }
+
+        // --- NOVA FUNÇÃO PARA CHAMAR O SGA VIA AHK ---
+        function abrirSGA() {
+            // Muda o título da janela. O script AHK vai ler isso e trocar a tela.
+            document.title = "::: ABRIR_SGA :::";
+            
+            // Depois de 2 segundos, volta o nome normal (pra não travar o script)
+            setTimeout(function() {
+                document.title = "Totem DPE-MA";
+            }, 2000);
         }
 
         const VIDEO_ID = 'Z7MyL6UL0PU';

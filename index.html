@@ -2,306 +2,357 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
     <title>Totem DPE-MA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root { 
             --dpe-green: #009640; 
-            --dpe-green-hover: #007a33;
+            --dpe-bright-green: #00b34d; 
             --dpe-blue: #003366;  
-            --dpe-blue-dark: #002244;
-            --bg-body: #eaeff2;
-            --card-bg: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.9);
         }
 
         body, html { 
             margin: 0; padding: 0; 
             width: 100%; height: 100%; 
-            background-color: var(--bg-body);
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
             font-family: 'Montserrat', sans-serif; 
             overflow: hidden; 
-            user-select: none;
+            user-select: none; 
             display: flex;
             flex-direction: column;
+
+            /* 2. PROTEÇÃO CSS: Bloqueia gestos de pinça/zoom no Windows/Touch */
+            touch-action: none; 
+            -ms-touch-action: none;
         }
 
-        /* --- 1. CABEÇALHO --- */
+        /* --- BACKGROUND --- */
+        .bg-shape {
+            position: absolute;
+            background: linear-gradient(45deg, rgba(0, 150, 64, 0.1), rgba(0, 51, 102, 0.1));
+            border-radius: 50%;
+            z-index: -1;
+            animation: float 20s infinite ease-in-out;
+        }
+        .shape1 { width: 60vw; height: 60vw; top: -10%; left: -10%; }
+        .shape2 { width: 50vw; height: 50vw; bottom: -10%; right: -10%; animation-delay: -5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 50px); }
+        }
+
+        /* --- CABEÇALHO --- */
         .header {
-            height: 15vh; 
-            background-color: var(--dpe-blue);
+            height: 14vh; 
+            flex-shrink: 0;
+            background: rgba(0, 51, 102, 0.95);
+            backdrop-filter: blur(10px);
             display: flex;
             justify-content: center;
             align-items: center;
-            border-bottom: 5px solid var(--dpe-green);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            border-bottom: 4px solid var(--dpe-green);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
             z-index: 20;
+            position: relative;
         }
 
-        .header-logo {
-            height: 70%; 
-            width: auto; 
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); 
-            display: block;
-        }
+        .header-logo { height: 65%; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
 
         /* --- BOTÃO REFRESH --- */
         .refresh-btn {
-            position: fixed; 
-            top: 2vh;
-            right: 2vh;
-            width: 6vh; 
-            height: 6vh;
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(2px);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 3vh;
-            cursor: pointer;
-            z-index: 10000; 
-            transition: all 0.3s ease;
+            position: fixed; top: 0; right: 0; width: 60px; height: 60px;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 20px; color: rgba(255,255,255,0.05); cursor: pointer; z-index: 10000; 
         }
+        .refresh-btn:hover { background-color: rgba(255,0,0,0.2); color: white; }
 
-        .refresh-btn:hover {
-            background-color: rgba(255,255,255,0.2);
-            color: rgba(255, 255, 255, 0.8);
-            transform: rotate(90deg);
-        }
-
-        .refresh-btn:active {
-            background-color: var(--dpe-green);
-            color: white;
-            transform: scale(0.9);
-        }
-
-        /* --- 2. CONTEÚDO --- */
+        /* --- CONTEÚDO PRINCIPAL --- */
         .main-container {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 0 5%;
-            width: 90%; 
-            margin: 0 auto; 
+            flex-grow: 1; 
+            display: flex; 
+            justify-content: center; align-items: center;
+            padding: 2vh 4%; width: 92%; margin: 0 auto;
+            min-height: 0;
         }
 
-        .video-card {
-            background: var(--card-bg);
-            width: 100%;
-            padding: 15px;
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0, 51, 102, 0.15);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .video-label {
-            width: 100%;
-            text-align: left;
-            color: var(--dpe-blue);
-            font-size: 2vh;
-            font-weight: 700;
-            margin-bottom: 1.5vh;
-            padding-left: 10px;
-            border-left: 5px solid var(--dpe-green);
-            text-transform: uppercase;
+        /* --- MOLDURA DO VÍDEO --- */
+        .video-wrapper {
+            width: 100%; 
+            max-width: 1000px;
+            aspect-ratio: 16 / 9; 
+            background: #ffffff;
+            padding: 12px;
+            border-radius: 16px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15); 
+            position: relative;
+            display: flex; align-items: center; justify-content: center;
+            box-sizing: border-box;
         }
 
         .video-frame {
-            width: 100%;
-            aspect-ratio: 16 / 9; 
-            background: #000;
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
+            width: 100%; height: 100%; 
+            background: #000; border-radius: 8px; 
+            overflow: hidden; position: relative;
         }
-        
-        .video-frame iframe {
-            width: 100%; height: 100%;
-            border: none;
-            pointer-events: none;
-        }
+        .video-frame iframe { width: 100%; height: 100%; border: none; }
+        .video-click-shield { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; }
 
-        /* --- 3. RODAPÉ --- */
+        /* --- RODAPÉ --- */
         .footer {
-            height: 25vh; 
-            display: flex;
+            height: 32vh; 
+            flex-shrink: 0;
+            display: flex; 
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-end; 
             align-items: center;
-            z-index: 200;
-            position: relative;
-            padding-bottom: 4vh; 
+            z-index: 200; 
+            position: relative; 
+            padding-bottom: 0;
         }
 
-        .cta-button {
-            width: 80%; 
-            background: linear-gradient(135deg, var(--dpe-green) 0%, var(--dpe-green-hover) 100%);
-            color: white;
-            padding: 3vh 0;
-            border-radius: 50px;
-            font-size: 4vh;
-            font-weight: 800;
-            text-transform: uppercase;
-            box-shadow: 0 10px 25px rgba(0, 150, 64, 0.4);
-            animation: pulse-green 2s infinite;
+        .footer-content {
+            flex-grow: 1;
             display: flex;
-            align-items: center;    
+            flex-direction: column;
             justify-content: center; 
-            gap: 20px;
-            cursor: pointer;
-            border: 3px solid white;
-        }
-
-        .cta-subtext {
-            margin-top: 2vh;
-            color: var(--dpe-blue-dark);
-            font-size: 1.8vh;
-            font-weight: 600;
-            opacity: 0.6;
-        }
-
-        /* --- LETREIRO --- */
-        .marquee-footer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: var(--dpe-blue);
-            border-top: 3px solid var(--dpe-green);
-            padding: 0.8vh 0; 
-            overflow: hidden;
-            white-space: nowrap;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-        }
-
-        .marquee-content {
-            display: inline-block;
-            color: #ffffff;
-            font-size: 2vh; 
-            font-weight: 600;
-            font-style: italic;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            animation: scroll-left 30s linear infinite; 
-            padding-left: 100%;
-        }
-        
-        @keyframes scroll-left {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(-100%, 0); }
-        }
-
-        /* --- TELA DE CARREGAMENTO --- */
-        #loading-overlay {
-            display: none; 
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0, 51, 102, 0.95); 
-            z-index: 10000; 
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
-            color: white;
-            text-align: center;
+            width: 100%;
+            gap: 2.5vh; 
+            padding-bottom: 3vh; 
         }
-        
+
+        /* --- BOTÃO --- */
+        .cta-button {
+            width: 80%; max-width: 800px;
+            background: linear-gradient(135deg, var(--dpe-bright-green) 0%, var(--dpe-green) 100%);
+            color: white; 
+            padding: 2.5vh 3vh; 
+            border-radius: 20px; 
+            display: flex; align-items: center; justify-content: center; gap: 15px;
+            box-shadow: 0 0 20px rgba(0, 150, 64, 0.6);
+            border: 4px solid #fff; 
+            cursor: pointer; 
+            transition: all 0.1s; 
+            position: relative; overflow: hidden;
+            animation: super-pulse 1.8s infinite ease-in-out;
+        }
+
+        .cta-button span#btn-icon {
+            font-size: 5vh; flex-shrink: 0; 
+            animation: bounce-finger 1s infinite alternate ease-in-out;
+        }
+
+        .cta-button span#btn-text {
+            font-size: 3.2vh; font-weight: 800; text-transform: uppercase;
+            text-align: center; line-height: 1.1; 
+        }
+
+        @keyframes super-pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 180, 70, 0.7); }
+            50% { transform: scale(1.03); box-shadow: 0 0 50px 15px rgba(0, 255, 100, 0.6); filter: brightness(1.2); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 180, 70, 0); }
+        }
+
+        .cta-button::after {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            animation: shine 2.5s infinite;
+        }
+        .cta-button:active { transform: scale(0.95) !important; box-shadow: 0 0 10px rgba(0, 150, 64, 0.8) !important; filter: brightness(0.9); animation: none; }
+        @keyframes bounce-finger { 0% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
+        @keyframes shine { 0% { left: -100%; } 20% { left: 100%; } 100% { left: 100%; } }
+
+        /* --- CARROSSEL HÍBRIDO --- */
+        .info-carousel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 8px 30px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.8);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            width: 80%; 
+            max-width: 800px;
+            min-height: 5vh;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .carousel-left {
+            flex: 1; display: flex; justify-content: flex-start; align-items: center; overflow: hidden;
+        }
+        .info-text {
+            color: var(--dpe-blue); font-size: 1.6vh; font-weight: 700; white-space: nowrap;
+            animation: fadeUp 0.5s ease-out; display: flex; align-items: center; gap: 8px;
+        }
+        .info-icon { color: var(--dpe-green); font-size: 2vh; }
+        .carousel-divider {
+            width: 2px; height: 3vh; background-color: rgba(0, 51, 102, 0.2); margin: 0 20px;
+        }
+        .carousel-right {
+            display: flex; flex-direction: column; align-items: flex-end; justify-content: center; flex-shrink: 0;
+        }
+        .mini-clock { color: var(--dpe-blue); font-size: 2vh; font-weight: 800; line-height: 1; }
+        .mini-date {
+            color: var(--dpe-green); font-size: 1vh; font-weight: 700; text-transform: uppercase;
+            margin-top: 3px; letter-spacing: 0.5px;
+        }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- LETREIRO FIXO --- */
+        .marquee-footer {
+            width: 100%; background: var(--dpe-blue); border-top: 3px solid var(--dpe-green);
+            padding: 1.2vh 0; overflow: hidden; white-space: nowrap; z-index: 300;
+        }
+        .marquee-content {
+            display: inline-block; color: white; font-size: 1.8vh; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 1px;
+            animation: scroll-left 45s linear infinite; padding-left: 100%;
+        }
+        @keyframes scroll-left { to { transform: translate(-100%, 0); } }
+
+        /* --- LOADING OVERLAY --- */
+        #loading-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #003366; z-index: 20000; flex-direction: column;
+            justify-content: center; align-items: center; color: white;
+        }
         .loader {
-            border: 8px solid rgba(255,255,255,0.3);
-            border-top: 8px solid var(--dpe-green);
-            border-radius: 50%;
-            width: 80px;
-            height: 80px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+            border: 6px solid rgba(255,255,255,0.2); border-top: 6px solid var(--dpe-green);
+            border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin-bottom: 20px;
         }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .click-shield {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 99; background: transparent; cursor: pointer;
-        }
-
-        @keyframes pulse-green {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 150, 64, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(0, 150, 64, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 150, 64, 0); }
-        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
+    <div class="bg-shape shape1"></div>
+    <div class="bg-shape shape2"></div>
+
     <div id="loading-overlay">
         <div class="loader"></div>
-        <h2>REINICIANDO SISTEMA...</h2>
-        <p>Aguarde um momento</p>
+        <h3>INICIANDO...</h3>
     </div>
 
-    <div class="refresh-btn" onclick="reiniciarSistema();" title="Recarregar Sistema">
-        ↻
-    </div>
+    <div class="refresh-btn" onclick="reiniciarSistema();">↻</div>
 
     <div class="header">
         <img src="https://defensoria.ma.def.br/static/img/logo-dpema-w.png" class="header-logo" alt="Logo DPE-MA">
     </div>
 
     <div class="main-container">
-        <div class="video-card">
+        <div class="video-wrapper">
             <div class="video-frame">
+                <div class="video-click-shield"></div>
                 <div id="player"></div>
             </div>
         </div>
     </div>
 
     <div class="footer">
-        <div class="cta-button" onclick="abrirSGA()">
-            <span>👆</span>
-            <span>Retirar Senha</span>
+        <div class="footer-content">
+            <div class="cta-button" id="btn-retirar" onclick="abrirSGA()">
+                <span id="btn-icon">👆</span>
+                <span id="btn-text">INICIAR ATENDIMENTO</span>
+            </div>
+
+            <div class="info-carousel">
+                <div class="carousel-left">
+                    <div class="info-text" id="info-carousel-text">
+                        <span class="info-icon">💡</span> Bem-vindo à Defensoria Pública
+                    </div>
+                </div>
+                <div class="carousel-divider"></div>
+                <div class="carousel-right">
+                    <div class="mini-clock" id="mini-clock">00:00</div>
+                    <div class="mini-date" id="mini-date">---</div>
+                </div>
+            </div>
         </div>
-        <div class="cta-subtext">Toque na tela para iniciar o atendimento</div>
 
         <div class="marquee-footer">
             <div class="marquee-content">
-                "Você não está sozinho" &nbsp;&nbsp;&nbsp; • &nbsp;&nbsp;&nbsp; Defensoria Pública do Maranhão &nbsp;&nbsp;&nbsp; • &nbsp;&nbsp;&nbsp; "Você não está sozinho" &nbsp;&nbsp;&nbsp; • &nbsp;&nbsp;&nbsp; Garantia de Direitos
+                DEFENSORIA PÚBLICA DO ESTADO DO MARANHÃO &nbsp; • &nbsp; GARANTIA DE DIREITOS &nbsp; • &nbsp; DISQUE 129 &nbsp;
             </div>
         </div>
     </div>
 
-    <div class="click-shield"></div>
-
     <script>
+        // 3. PROTEÇÃO JS: Bloqueia atalhos de teclado e mouse
+        document.addEventListener('keydown', function(e) {
+            // Bloqueia Ctrl +, Ctrl -, Ctrl 0 (Zoom)
+            if (e.ctrlKey && (
+                e.key === '+' || e.key === '-' || e.key === '0' ||
+                e.keyCode === 187 || e.keyCode === 189 || e.keyCode === 107 || e.keyCode === 109
+            )) {
+                e.preventDefault();
+            }
+        });
+
+        // Bloqueia Ctrl + Scroll do Mouse
+        document.addEventListener('wheel', function(e) {
+            if (e.ctrlKey) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Bloqueia Pinch-to-zoom 
+        document.addEventListener('gesturestart', function(e) {
+            e.preventDefault();
+        });
+
+
         function reiniciarSistema() {
             document.getElementById('loading-overlay').style.display = 'flex';
-            setTimeout(function() {
-                location.reload(true);
-            }, 1000);
+            setTimeout(function() { location.reload(true); }, 500);
         }
 
-        // --- NOVA FUNÇÃO PARA CHAMAR O SGA VIA AHK ---
-        function abrirSGA() {
-            // Muda o título da janela. O script AHK vai ler isso e trocar a tela.
-            document.title = "::: ABRIR_SGA :::";
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            const dateString = now.toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' }).replace('.', '').toUpperCase();
             
-            // Depois de 2 segundos, volta o nome normal (pra não travar o script)
-            setTimeout(function() {
-                document.title = "Totem DPE-MA";
-            }, 2000);
+            document.getElementById('mini-clock').innerText = timeString;
+            document.getElementById('mini-date').innerText = dateString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        const mensagens = [
+            "⚖️ Garantimos assistência jurídica gratuita",
+            "📞 Dúvidas? Ligue para o Disque 129"
+            
+        ];
+        let msgIndex = 0;
+        function rotacionarMensagens() {
+            const el = document.getElementById('info-carousel-text');
+            el.style.opacity = 0; 
+            setTimeout(() => {
+                msgIndex = (msgIndex + 1) % mensagens.length;
+                el.innerHTML = mensagens[msgIndex]; 
+                el.style.animation = 'none';
+                el.offsetHeight; 
+                el.style.animation = 'fadeUp 0.5s ease-out'; 
+                el.style.opacity = 1;
+            }, 500);
+        }
+        setInterval(rotacionarMensagens, 6000);
+
+        function abrirSGA() {
+            document.title = "::: ABRIR_SGA :::";
+            setTimeout(function() { document.title = "Totem DPE-MA"; }, 3000);
         }
 
         const VIDEO_ID = 'Z7MyL6UL0PU';
         const PLAYLIST_ID = 'PLsR1-uBqD718iATLdD10Gido8Kb3PXftO';
-        const VOLUME_ATIVO = 100;
-        const VOLUME_OCULTO = 0;
-
         var player;
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
@@ -316,27 +367,17 @@
                     'listType': 'playlist', 'list': PLAYLIST_ID,
                     'autoplay': 1, 'controls': 0, 'showinfo': 0, 
                     'rel': 0, 'loop': 1, 'modestbranding': 1,
-                    'mute': 0 
+                    'mute': 0, 'disablekb': 1, 'fs': 0
                 },
-                events: { 'onReady': onPlayerReady }
+                events: { 'onReady': onPlayerReady, 'onStateChange': onPlayerStateChange }
             });
         }
-
-        function onPlayerReady(event) {
-            event.target.setVolume(VOLUME_ATIVO);
-            event.target.playVideo();
-        }
-
+        function onPlayerReady(event) { event.target.setVolume(100); event.target.playVideo(); }
+        function onPlayerStateChange(event) { if (event.data === YT.PlayerState.ENDED) { player.playVideo(); } }
         document.addEventListener("visibilitychange", function() {
-            if (document.hidden) {
-                if(player && player.setVolume) player.setVolume(VOLUME_OCULTO);
-            } else {
-                if(player && player.setVolume) player.setVolume(VOLUME_ATIVO);
-            }
+            if (document.hidden) { if(player) player.setVolume(0); } 
+            else { if(player) { player.setVolume(100); player.playVideo(); } }
         });
     </script>
 </body>
 </html>
-
-
-

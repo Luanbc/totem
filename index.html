@@ -11,34 +11,32 @@
     
     <style>
         :root { 
-            --dpe-green: #009640; 
-            --dpe-bright-green: #00b34d; 
+            --dpe-green: #00b34d; /* Verde forte do botão */
+            --dpe-dark-green: #009640; /* Verde escuro do DPE */
             --dpe-blue: #003366;  
-            --glass-bg: rgba(255, 255, 255, 0.85);
-            --glass-border: rgba(255, 255, 255, 0.9);
+            --bg-light: #eef2f6;
         }
 
         body, html { 
             margin: 0; padding: 0; 
             width: 100%; height: 100%; 
-            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            /* Fundo limpo e suave estilo a imagem de referência */
+            background: linear-gradient(135deg, #f4f7f9 0%, #e0e8f0 100%);
             font-family: 'Montserrat', sans-serif; 
             overflow: hidden; 
             user-select: none; 
             display: flex;
             flex-direction: column;
 
-            /* 2. PROTEÇÃO CSS: Bloqueia gestos de pinça/zoom no Windows/Touch */
+            /* PROTEÇÃO CSS: Bloqueia gestos de pinça/zoom no Windows/Touch */
             touch-action: none; 
             -ms-touch-action: none;
         }
 
-        /* --- BACKGROUND --- */
+        /* --- BACKGROUND SUTIL --- */
         .bg-shape {
-            position: absolute;
-            background: linear-gradient(45deg, rgba(0, 150, 64, 0.1), rgba(0, 51, 102, 0.1));
-            border-radius: 50%;
-            z-index: -1;
+            position: absolute; border-radius: 50%; z-index: -1;
+            background: linear-gradient(45deg, rgba(0, 51, 102, 0.03), rgba(0, 150, 64, 0.03));
             animation: float 20s infinite ease-in-out;
         }
         .shape1 { width: 60vw; height: 60vw; top: -10%; left: -10%; }
@@ -51,20 +49,19 @@
 
         /* --- CABEÇALHO --- */
         .header {
-            height: 14vh; 
+            height: 12vh; /* Levemente menor para dar espaço à foto */
             flex-shrink: 0;
-            background: rgba(0, 51, 102, 0.95);
-            backdrop-filter: blur(10px);
+            background: var(--dpe-blue);
             display: flex;
             justify-content: center;
             align-items: center;
-            border-bottom: 4px solid var(--dpe-green);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            border-bottom: 4px solid var(--dpe-dark-green);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             z-index: 20;
             position: relative;
         }
 
-        .header-logo { height: 65%; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+        .header-logo { height: 60%; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
 
         /* --- BOTÃO REFRESH --- */
         .refresh-btn {
@@ -74,134 +71,138 @@
         }
         .refresh-btn:hover { background-color: rgba(255,0,0,0.2); color: white; }
 
-        /* --- CONTEÚDO PRINCIPAL --- */
+        /* --- CONTEÚDO PRINCIPAL (EMPILHADO) --- */
         .main-container {
             flex-grow: 1; 
             display: flex; 
+            flex-direction: column; /* Empilha Foto > Botão > Pílula */
             justify-content: center; align-items: center;
-            padding: 2vh 4%; width: 92%; margin: 0 auto;
-            min-height: 0;
+            width: 100%; 
+            padding: 2vh 0;
+            box-sizing: border-box;
+            z-index: 10;
         }
 
-        /* --- MOLDURA DO VÍDEO --- */
-        .video-wrapper {
-            width: 100%; 
-            max-width: 1000px;
-            aspect-ratio: 16 / 9; 
-            background: #ffffff;
-            padding: 12px;
-            border-radius: 16px; 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15); 
+        /* --- 1. MOLDURA DA FOTO --- */
+        .carousel-wrapper {
+            width: 85%; 
+            max-width: 900px;
+            aspect-ratio: 16 / 9; /* Mantém a proporção widescreen */
+            background: #ffffff; 
+            padding: 12px; /* Borda branca grossa */
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
             position: relative;
-            display: flex; align-items: center; justify-content: center;
             box-sizing: border-box;
         }
 
-        .video-frame {
-            width: 100%; height: 100%; 
-            background: #000; border-radius: 8px; 
-            overflow: hidden; position: relative;
-        }
-        .video-frame iframe { width: 100%; height: 100%; border: none; }
-        .video-click-shield { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; }
-
-        /* --- RODAPÉ --- */
-        .footer {
-            height: 32vh; 
-            flex-shrink: 0;
-            display: flex; 
-            flex-direction: column;
-            justify-content: flex-end; 
-            align-items: center;
-            z-index: 200; 
-            position: relative; 
-            padding-bottom: 0;
-        }
-
-        .footer-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center; 
-            align-items: center;
+        /* Área interna das imagens */
+        .carousel-images {
             width: 100%;
-            gap: 2.5vh; 
-            padding-bottom: 3vh; 
+            height: 100%;
+            border-radius: 6px; 
+            overflow: hidden;
+            position: relative;
+            background-color: #eee; 
         }
 
-        /* --- BOTÃO --- */
+        .carousel-images img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Faz a foto preencher todo o espaço e corta as sobras */
+            object-position: center 20%; /* Foca mais na parte de cima/centro da foto */
+            opacity: 0; 
+            transition: opacity 1s ease-in-out; 
+            z-index: 1;
+        }
+
+        .carousel-images img.active-image {
+            opacity: 1;
+            z-index: 2; 
+        }
+
+        /* --- 2. BOTÃO SOBREPOSTO --- */
         .cta-button {
-            width: 80%; max-width: 800px;
-            background: linear-gradient(135deg, var(--dpe-bright-green) 0%, var(--dpe-green) 100%);
+            width: 75%; max-width: 750px;
+            background: var(--dpe-green);
             color: white; 
             padding: 2.5vh 3vh; 
-            border-radius: 20px; 
+            border-radius: 15px; 
             display: flex; align-items: center; justify-content: center; gap: 15px;
-            box-shadow: 0 0 20px rgba(0, 150, 64, 0.6);
+            
+            box-shadow: 0 0 30px rgba(0, 179, 77, 0.6);
             border: 4px solid #fff; 
             cursor: pointer; 
-            transition: all 0.1s; 
-            position: relative; overflow: hidden;
+            
+            position: relative; 
+            z-index: 20; /* Fica acima da foto */
+            
+            /* SOBREPOSIÇÃO: Puxa o botão para cima da moldura */
+            margin-top: -4vh; 
+            
             animation: super-pulse 1.8s infinite ease-in-out;
         }
 
         .cta-button span#btn-icon {
-            font-size: 5vh; flex-shrink: 0; 
+            font-size: 4vh; flex-shrink: 0; 
             animation: bounce-finger 1s infinite alternate ease-in-out;
         }
 
         .cta-button span#btn-text {
-            font-size: 3.2vh; font-weight: 800; text-transform: uppercase;
-            text-align: center; line-height: 1.1; 
+            font-size: 3.5vh; font-weight: 800; text-transform: uppercase;
+            text-align: center; line-height: 1; letter-spacing: 1px;
         }
 
         @keyframes super-pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 180, 70, 0.7); }
-            50% { transform: scale(1.03); box-shadow: 0 0 50px 15px rgba(0, 255, 100, 0.6); filter: brightness(1.2); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 180, 70, 0); }
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 179, 77, 0.7); }
+            50% { transform: scale(1.02); box-shadow: 0 0 40px 15px rgba(0, 255, 100, 0.5); filter: brightness(1.1); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 179, 77, 0); }
         }
 
         .cta-button::after {
             content: ''; position: absolute; top: 0; left: -100%;
             width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-            animation: shine 2.5s infinite;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shine 3s infinite;
         }
-        .cta-button:active { transform: scale(0.95) !important; box-shadow: 0 0 10px rgba(0, 150, 64, 0.8) !important; filter: brightness(0.9); animation: none; }
+        .cta-button:active { transform: scale(0.95) !important; animation: none; filter: brightness(0.9); }
         @keyframes bounce-finger { 0% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
         @keyframes shine { 0% { left: -100%; } 20% { left: 100%; } 100% { left: 100%; } }
 
-        /* --- CARROSSEL HÍBRIDO --- */
+        /* --- 3. PÍLULA HÍBRIDA (FOOTER/INFO) --- */
         .info-carousel {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(10px);
-            padding: 8px 30px;
+            background: #ffffff;
+            padding: 1.5vh 30px;
             border-radius: 50px;
-            border: 1px solid rgba(255,255,255,0.8);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            width: 80%; 
-            max-width: 800px;
-            min-height: 5vh;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            width: 70%; 
+            max-width: 700px;
             display: flex; justify-content: space-between; align-items: center;
+            margin-top: 3vh; /* Espaço entre o botão e a pílula */
         }
 
         .carousel-left {
             flex: 1; display: flex; justify-content: flex-start; align-items: center; overflow: hidden;
         }
         .info-text {
-            color: var(--dpe-blue); font-size: 1.5vh; font-weight: 700; white-space: nowrap;
+            color: var(--dpe-blue); font-size: 1.8vh; font-weight: 700; white-space: nowrap;
             animation: fadeUp 0.5s ease-out; display: flex; align-items: center; gap: 8px;
         }
-        .info-icon { color: var(--dpe-green); font-size: 2vh; }
+        .info-icon { color: #f2c94c; font-size: 2.2vh; }
+        
         .carousel-divider {
-            width: 2px; height: 3vh; background-color: rgba(0, 51, 102, 0.2); margin: 0 20px;
+            width: 2px; height: 3vh; background-color: rgba(0, 51, 102, 0.15); margin: 0 20px;
         }
+        
         .carousel-right {
             display: flex; flex-direction: column; align-items: flex-end; justify-content: center; flex-shrink: 0;
         }
-        .mini-clock { color: var(--dpe-blue); font-size: 1.5vh; font-weight: 800; line-height: 1; }
+        .mini-clock { color: var(--dpe-blue); font-size: 2.2vh; font-weight: 800; line-height: 1; }
         .mini-date {
-            color: var(--dpe-green); font-size: 0.8vh; font-weight: 700; text-transform: uppercase;
+            color: var(--dpe-dark-green); font-size: 1.1vh; font-weight: 800; text-transform: uppercase;
             margin-top: 3px; letter-spacing: 0.5px;
         }
 
@@ -209,11 +210,17 @@
 
         /* --- LETREIRO FIXO --- */
         .marquee-footer {
-            width: 100%; background: var(--dpe-blue); border-top: 3px solid var(--dpe-green);
-            padding: 1.2vh 0; overflow: hidden; white-space: nowrap; z-index: 300;
+            width: 100%; 
+            background: var(--dpe-blue); 
+            border-top: 3px solid var(--dpe-dark-green);
+            padding: 1.2vh 0; 
+            overflow: hidden; 
+            white-space: nowrap; 
+            z-index: 300;
+            margin-top: auto; /* Empurra para o final da tela */
         }
         .marquee-content {
-            display: inline-block; color: white; font-size: 1.8vh; font-weight: 600;
+            display: inline-block; color: white; font-size: 1.6vh; font-weight: 600;
             text-transform: uppercase; letter-spacing: 1px;
             animation: scroll-left 45s linear infinite; padding-left: 100%;
         }
@@ -226,7 +233,7 @@
             justify-content: center; align-items: center; color: white;
         }
         .loader {
-            border: 6px solid rgba(255,255,255,0.2); border-top: 6px solid var(--dpe-green);
+            border: 6px solid rgba(255,255,255,0.2); border-top: 6px solid var(--dpe-dark-green);
             border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin-bottom: 20px;
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -249,39 +256,46 @@
     </div>
 
     <div class="main-container">
-        <div class="video-wrapper">
-            <div class="video-frame">
-                <div class="video-click-shield"></div>
-                <div id="player"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="footer">
-        <div class="footer-content">
-            <div class="cta-button" id="btn-retirar" onclick="abrirSGA()">
-                <span id="btn-icon">👆</span>
-                <span id="btn-text">INICIAR ATENDIMENTO</span>
-            </div>
-
-            <div class="info-carousel">
-                <div class="carousel-left">
-                    <div class="info-text" id="info-carousel-text">
-                        <span class="info-icon">💡</span> Bem-vindo à Defensoria Pública
-                    </div>
-                </div>
-                <div class="carousel-divider"></div>
-                <div class="carousel-right">
-                    <div class="mini-clock" id="mini-clock">00:00</div>
-                    <div class="mini-date" id="mini-date">---</div>
-                </div>
+        
+        <div class="carousel-wrapper">
+            <div class="carousel-images" id="main-image-carousel">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20250519_103731.jpg" class="active-image" alt="Informativo 1">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20250519_105018.jpg" alt="Informativo 2">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20250519_104845.jpg" alt="Informativo 3">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20250519_110543.jpg" alt="Informativo 4">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20250519_104845.jpg" alt="Informativo 5">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/image000782.jpeg" alt="Informativo 6">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20250518_073315.jpg" alt="Informativo 7">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20241212092419.jpg" alt="Informativo 8">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20240815143300.jpg" alt="Informativo 9">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20240318090539_foto8.jpg" alt="Informativo 10">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20241212091444.jpg" alt="Informativo 11">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20241212091444_foto7.jpg" alt="Informativo 12">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20240318090540_foto10.jpg" alt="Informativo 13">
             </div>
         </div>
 
-        <div class="marquee-footer">
-            <div class="marquee-content">
-                DEFENSORIA PÚBLICA DO ESTADO DO MARANHÃO &nbsp; • &nbsp; GARANTIA DE DIREITOS &nbsp; • &nbsp; DISQUE 129 &nbsp;
+        <div class="cta-button" id="btn-retirar" onclick="abrirSGA()">
+            <span id="btn-icon">👆</span>
+            <span id="btn-text">INICIAR ATENDIMENTO</span>
+        </div>
+
+        <div class="info-carousel">
+            <div class="carousel-left">
+                <div class="info-text" id="info-carousel-text">
+                    <span class="info-icon">💡</span> Bem-vindo à Defensoria Pública
+                </div>
             </div>
+            <div class="carousel-divider"></div>
+            <div class="carousel-right">
+                <div class="mini-clock" id="mini-clock">00:00</div>
+                <div class="mini-date" id="mini-date">---</div>
+            </div>
+        </div>
+
+    </div> <div class="marquee-footer">
+        <div class="marquee-content">
+            DEFENSORIA PÚBLICA DO ESTADO DO MARANHÃO &nbsp; • &nbsp; GARANTIA DE DIREITOS &nbsp; • &nbsp; DISQUE 129 &nbsp;
         </div>
     </div>
 
@@ -304,7 +318,7 @@
             }
         }, { passive: false });
 
-        // Bloqueia Pinch-to-zoom 
+        // Bloqueia Pinch-to-zoom (caso o CSS falhe em algum browser antigo)
         document.addEventListener('gesturestart', function(e) {
             e.preventDefault();
         });
@@ -326,9 +340,10 @@
         setInterval(updateClock, 1000);
         updateClock();
 
+        // --- LÓGICA DO CARROSSEL DE TEXTO (FOOTER) ---
         const mensagens = [
-            "⚖️ Garantimos assistência jurídica gratuita",
-            "📞 Dúvidas? Ligue para o Disque 129"
+            "<span class='info-icon'>⚖️</span> Garantimos assistência jurídica gratuita",
+            "<span class='info-icon'>📞</span> Dúvidas? Ligue para o Disque 129"
             
         ];
         let msgIndex = 0;
@@ -346,38 +361,30 @@
         }
         setInterval(rotacionarMensagens, 6000);
 
+        // --- LÓGICA DO CARROSSEL DE IMAGENS (CENTRAL) ---
+        const imageCarousel = document.getElementById('main-image-carousel');
+        const images = imageCarousel.getElementsByTagName('img');
+        let imgIndex = 0;
+
+        function rotacionarImagens() {
+            // Remove a classe ativa da imagem atual
+            images[imgIndex].classList.remove('active-image');
+            
+            // Incrementa o índice (volta ao zero se chegar no fim)
+            imgIndex = (imgIndex + 1) % images.length;
+            
+            // Adiciona a classe ativa na próxima imagem
+            images[imgIndex].classList.add('active-image');
+        }
+        // Troca de imagem a cada 8 segundos (8000ms)
+        setInterval(rotacionarImagens, 7000); 
+
+
         function abrirSGA() {
             document.title = "::: ABRIR_SGA :::";
             setTimeout(function() { document.title = "Totem DPE-MA"; }, 3000);
         }
 
-        const VIDEO_ID = 'Z7MyL6UL0PU';
-        const PLAYLIST_ID = 'PLsR1-uBqD718iATLdD10Gido8Kb3PXftO';
-        var player;
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '100%', width: '100%',
-                videoId: VIDEO_ID,
-                playerVars: {
-                    'listType': 'playlist', 'list': PLAYLIST_ID,
-                    'autoplay': 1, 'controls': 0, 'showinfo': 0, 
-                    'rel': 0, 'loop': 1, 'modestbranding': 1,
-                    'mute': 0, 'disablekb': 1, 'fs': 0
-                },
-                events: { 'onReady': onPlayerReady, 'onStateChange': onPlayerStateChange }
-            });
-        }
-        function onPlayerReady(event) { event.target.setVolume(100); event.target.playVideo(); }
-        function onPlayerStateChange(event) { if (event.data === YT.PlayerState.ENDED) { player.playVideo(); } }
-        document.addEventListener("visibilitychange", function() {
-            if (document.hidden) { if(player) player.setVolume(0); } 
-            else { if(player) { player.setVolume(100); player.playVideo(); } }
-        });
     </script>
 </body>
 </html>

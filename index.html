@@ -7,103 +7,81 @@
     
     <title>Totem DPE-MA</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        :root { 
-            --dpe-green: #00b34d; /* Verde forte do botão */
-            --dpe-dark-green: #009640; /* Verde escuro do DPE */
-            --dpe-blue: #003366;  
-            --bg-light: #eef2f6;
-        }
-
+        /* --- RESET E VARIÁVEIS --- */
         body, html { 
             margin: 0; padding: 0; 
             width: 100%; height: 100%; 
-            /* Fundo limpo e suave estilo a imagem de referência */
-            background: linear-gradient(135deg, #f4f7f9 0%, #e0e8f0 100%);
+            background: #f0f4f8; /* Fundo cinza super limpo */
             font-family: 'Montserrat', sans-serif; 
             overflow: hidden; 
             user-select: none; 
             display: flex;
             flex-direction: column;
-
-            /* PROTEÇÃO CSS: Bloqueia gestos de pinça/zoom no Windows/Touch */
             touch-action: none; 
             -ms-touch-action: none;
         }
 
-        /* --- BACKGROUND SUTIL --- */
-        .bg-shape {
-            position: absolute; border-radius: 50%; z-index: -1;
-            background: linear-gradient(45deg, rgba(0, 51, 102, 0.03), rgba(0, 150, 64, 0.03));
-            animation: float 20s infinite ease-in-out;
-        }
-        .shape1 { width: 60vw; height: 60vw; top: -10%; left: -10%; }
-        .shape2 { width: 50vw; height: 50vw; bottom: -10%; right: -10%; animation-delay: -5s; }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(30px, 50px); }
-        }
-
         /* --- CABEÇALHO --- */
         .header {
-            height: 12vh; /* Levemente menor para dar espaço à foto */
-            flex-shrink: 0;
-            background: var(--dpe-blue);
+            height: 10vh; /* Tamanho exato de 10% da tela */
+            background: #003366;
             display: flex;
             justify-content: center;
             align-items: center;
-            border-bottom: 4px solid var(--dpe-dark-green);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-bottom: 0.6vh solid #009640;
+            box-shadow: 0 1vh 2vh rgba(0, 0, 0, 0.15);
             z-index: 20;
-            position: relative;
+            flex-shrink: 0;
         }
 
-        .header-logo { height: 60%; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+        .header-logo { 
+            height: 60%; 
+            width: auto; 
+        }
 
-        /* --- BOTÃO REFRESH --- */
+        /* --- BOTÃO REFRESH OCULTO --- */
         .refresh-btn {
-            position: fixed; top: 0; right: 0; width: 60px; height: 60px;
+            position: fixed; top: 0; right: 0; width: 8vw; height: 10vh;
             display: flex; justify-content: center; align-items: center;
-            font-size: 20px; color: rgba(255,255,255,0.05); cursor: pointer; z-index: 10000; 
+            font-size: 3vh; color: rgba(255,255,255,0.05); cursor: pointer; z-index: 10000; 
         }
-        .refresh-btn:hover { background-color: rgba(255,0,0,0.2); color: white; }
+        .refresh-btn:active { background-color: rgba(255,0,0,0.3); }
 
-        /* --- CONTEÚDO PRINCIPAL (EMPILHADO) --- */
+        /* --- CONTEÚDO PRINCIPAL --- */
         .main-container {
             flex-grow: 1; 
             display: flex; 
-            flex-direction: column; /* Empilha Foto > Botão > Pílula */
-            justify-content: center; align-items: center;
+            flex-direction: column;
+            justify-content: center; /* Centraliza tudo verticalmente */
+            align-items: center;
             width: 100%; 
-            padding: 2vh 0;
             box-sizing: border-box;
             z-index: 10;
         }
 
-        /* --- 1. MOLDURA DA FOTO --- */
+        /* --- 1. MOLDURA DA FOTO (SEPARADA DO BOTÃO) --- */
         .carousel-wrapper {
             width: 85%; 
-            max-width: 900px;
-            aspect-ratio: 16 / 9; /* Mantém a proporção widescreen */
+            height: 48vh; /* Altura ajustada para dar respiro aos outros itens */
             background: #ffffff; 
-            padding: 12px; /* Borda branca grossa */
-            border-radius: 12px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            padding: 1.5vh; 
+            border-radius: 2.5vh; 
+            box-shadow: 0 1.5vh 3vh rgba(0,0,0,0.08); 
             position: relative;
             box-sizing: border-box;
+            margin-bottom: 4vh; /* ESPAÇO ENTRE A FOTO E O BOTÃO */
         }
 
-        /* Área interna das imagens */
         .carousel-images {
             width: 100%;
             height: 100%;
-            border-radius: 6px; 
+            border-radius: 1vh; 
             overflow: hidden;
             position: relative;
-            background-color: #eee; 
+            background-color: #e0e0e0; 
         }
 
         .carousel-images img {
@@ -112,141 +90,142 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Faz a foto preencher todo o espaço e corta as sobras */
-            object-position: center 20%; /* Foca mais na parte de cima/centro da foto */
+            object-fit: cover; 
+            object-position: center 20%;
             opacity: 0; 
             transition: opacity 1s ease-in-out; 
-            z-index: 1;
         }
 
         .carousel-images img.active-image {
             opacity: 1;
-            z-index: 2; 
         }
 
-        /* --- 2. BOTÃO SOBREPOSTO --- */
+        /* --- 2. BOTÃO INICIAR ATENDIMENTO (SÓLIDO E SEGURO) --- */
         .cta-button {
-            width: 75%; max-width: 750px;
-            background: var(--dpe-green);
+            width: 85%; 
+            height: 11vh; 
+            background-color: #00b34d; 
             color: white; 
-            padding: 2.5vh 3vh; 
-            border-radius: 15px; 
-            display: flex; align-items: center; justify-content: center; gap: 15px;
-            
-            box-shadow: 0 0 30px rgba(0, 179, 77, 0.6);
-            border: 4px solid #fff; 
+            border-radius: 5.5vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 2vw;
+            box-shadow: 0 1vh 3vh rgba(0, 179, 77, 0.4);
+            border: 0.6vh solid #ffffff; 
             cursor: pointer; 
-            
-            position: relative; 
-            z-index: 20; /* Fica acima da foto */
-            
-            /* SOBREPOSIÇÃO: Puxa o botão para cima da moldura */
-            margin-top: -4vh; 
-            
-            animation: super-pulse 1.8s infinite ease-in-out;
+            z-index: 20;
+            animation: pulse-solid 2s infinite;
         }
 
         .cta-button span#btn-icon {
-            font-size: 4vh; flex-shrink: 0; 
-            animation: bounce-finger 1s infinite alternate ease-in-out;
+            font-size: 5vh; 
+            animation: bounce 1s infinite alternate ease-in-out;
         }
 
         .cta-button span#btn-text {
-            font-size: 3.5vh; font-weight: 800; text-transform: uppercase;
-            text-align: center; line-height: 1; letter-spacing: 1px;
+            font-size: 3.0vh; 
+            font-weight: 800; 
+            text-transform: uppercase;
+            white-space: nowrap; 
+            letter-spacing: 0.1vw;
         }
 
-        @keyframes super-pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 179, 77, 0.7); }
-            50% { transform: scale(1.02); box-shadow: 0 0 40px 15px rgba(0, 255, 100, 0.5); filter: brightness(1.1); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 179, 77, 0); }
+        @keyframes pulse-solid {
+            0% { transform: scale(1); box-shadow: 0 1vh 2vh rgba(0, 179, 77, 0.4); }
+            50% { transform: scale(1.02); box-shadow: 0 2vh 4vh rgba(0, 179, 77, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 1vh 2vh rgba(0, 179, 77, 0.4); }
         }
 
-        .cta-button::after {
-            content: ''; position: absolute; top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            animation: shine 3s infinite;
-        }
-        .cta-button:active { transform: scale(0.95) !important; animation: none; filter: brightness(0.9); }
-        @keyframes bounce-finger { 0% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
-        @keyframes shine { 0% { left: -100%; } 20% { left: 100%; } 100% { left: 100%; } }
+        @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-0.8vh); } }
 
-        /* --- 3. PÍLULA HÍBRIDA (FOOTER/INFO) --- */
+        .cta-button:active { transform: scale(0.95) !important; animation: none; background-color: #009640; }
+
+        /* --- 3. PÍLULA HÍBRIDA --- */
         .info-carousel {
             background: #ffffff;
-            padding: 1.5vh 30px;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-            width: 70%; 
-            max-width: 700px;
-            display: flex; justify-content: space-between; align-items: center;
-            margin-top: 3vh; /* Espaço entre o botão e a pílula */
+            width: 90%; 
+            height: 9vh; 
+            border-radius: 4.5vh;
+            padding: 0 4vw;
+            box-shadow: 0 1vh 2vh rgba(0,0,0,0.05);
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;    
+            margin-top: 4vh; /* ESPAÇO ENTRE O BOTÃO E A PÍLULA */
+            box-sizing: border-box;
         }
 
         .carousel-left {
-            flex: 1; display: flex; justify-content: flex-start; align-items: center; overflow: hidden;
+            flex: 1; display: flex; align-items: center; overflow: hidden;
         }
+        
         .info-text {
-            color: var(--dpe-blue); font-size: 1.8vh; font-weight: 700; white-space: nowrap;
-            animation: fadeUp 0.5s ease-out; display: flex; align-items: center; gap: 8px;
+            color: #003366; 
+            font-size: 1.4vh; 
+            font-weight: 700; 
+            white-space: nowrap; 
+            display: flex; align-items: center; gap: 1vw;
+            animation: fadeUp 0.5s ease-out;
         }
-        .info-icon { color: #f2c94c; font-size: 2.2vh; }
+        
+        .info-icon { color: #009640; font-size: 2vh; }
         
         .carousel-divider {
-            width: 2px; height: 3vh; background-color: rgba(0, 51, 102, 0.15); margin: 0 20px;
+            width: 0.3vw; height: 4vh; background-color: rgba(0, 51, 102, 0.15); margin: 0 3vw;
         }
         
         .carousel-right {
-            display: flex; flex-direction: column; align-items: flex-end; justify-content: center; flex-shrink: 0;
+            display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
         }
-        .mini-clock { color: var(--dpe-blue); font-size: 2.2vh; font-weight: 800; line-height: 1; }
+        
+        .mini-clock { color: #003366; font-size: 2.3vh; font-weight: 800; line-height: 1; }
         .mini-date {
-            color: var(--dpe-dark-green); font-size: 1.1vh; font-weight: 800; text-transform: uppercase;
-            margin-top: 3px; letter-spacing: 0.5px;
+            color: #009640; font-size: 0.9vh; font-weight: 800; text-transform: uppercase;
+            margin-top: 0.5vh; letter-spacing: 0.1vw;
         }
 
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(1vh); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- LETREIRO FIXO --- */
+        /* --- 4. LETREIRO FIXO --- */
         .marquee-footer {
             width: 100%; 
-            background: var(--dpe-blue); 
-            border-top: 3px solid var(--dpe-dark-green);
-            padding: 1.2vh 0; 
+            height: 6vh;
+            background: #003366; 
+            border-top: 0.5vh solid #009640;
+            display: flex;
+            align-items: center;
             overflow: hidden; 
             white-space: nowrap; 
             z-index: 300;
-            margin-top: auto; /* Empurra para o final da tela */
         }
+        
         .marquee-content {
-            display: inline-block; color: white; font-size: 1.6vh; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 1px;
-            animation: scroll-left 45s linear infinite; padding-left: 100%;
+            display: inline-block; color: white; font-size: 2vh; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.2vw;
+            animation: scroll-left 30s linear infinite; padding-left: 100%;
         }
+        
         @keyframes scroll-left { to { transform: translate(-100%, 0); } }
 
-        /* --- LOADING OVERLAY --- */
+        /* --- TELA DE CARREGAMENTO --- */
         #loading-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #003366; z-index: 20000; flex-direction: column;
             justify-content: center; align-items: center; color: white;
         }
         .loader {
-            border: 6px solid rgba(255,255,255,0.2); border-top: 6px solid var(--dpe-dark-green);
-            border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin-bottom: 20px;
+            border: 1vh solid rgba(255,255,255,0.2); border-top: 1vh solid #00b34d;
+            border-radius: 50%; width: 10vh; height: 10vh; animation: spin 1s linear infinite; margin-bottom: 2vh;
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div class="bg-shape shape1"></div>
-    <div class="bg-shape shape2"></div>
-
     <div id="loading-overlay">
         <div class="loader"></div>
-        <h3>INICIANDO...</h3>
+        <h3 style="font-size: 3vh;">INICIANDO...</h3>
     </div>
 
     <div class="refresh-btn" onclick="reiniciarSistema();">↻</div>
@@ -263,15 +242,20 @@
                 <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20250519_105018.jpg" alt="Informativo 2">
                 <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20250519_104845.jpg" alt="Informativo 3">
                 <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20250519_110543.jpg" alt="Informativo 4">
-                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20250519_104845.jpg" alt="Informativo 5">
                 <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/image000782.jpeg" alt="Informativo 6">
                 <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20250518_073315.jpg" alt="Informativo 7">
                 <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20241212092419.jpg" alt="Informativo 8">
                 <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20240815143300.jpg" alt="Informativo 9">
-                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20240318090539_foto8.jpg" alt="Informativo 10">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20241121093538_foto7.jpg" alt="Informativo 10">
                 <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20241212091444.jpg" alt="Informativo 11">
-                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20241212091444_foto7.jpg" alt="Informativo 12">
-                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20240318090540_foto10.jpg" alt="Informativo 13">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/IMG_1488.JPG" alt="Informativo 12">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/IMG_4196.jpg" alt="Informativo 13">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20240606160007.jpg" alt="Informativo 14">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20250519_103512.jpg" alt="Informativo 15">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20240815143300.jpg" alt="Informativo 16">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20240815143300_foto5.jpg" alt="Informativo 17">
+                <img src="https://defensoria.ma.def.br/dpema/public/dpema_v2/thumbs/800x0/20241121111202_foto3.jpg" alt="Informativo 18">
+
             </div>
         </div>
 
@@ -292,36 +276,24 @@
                 <div class="mini-date" id="mini-date">---</div>
             </div>
         </div>
+        
+    </div>
 
-    </div> <div class="marquee-footer">
+    <div class="marquee-footer">
         <div class="marquee-content">
-            DEFENSORIA PÚBLICA DO ESTADO DO MARANHÃO &nbsp; • &nbsp; GARANTIA DE DIREITOS &nbsp; • &nbsp; DISQUE 129 &nbsp;
+            DEFENSORIA PÚBLICA DO ESTADO DO MARANHÃO &nbsp; • &nbsp; GARANTIA DE DIREITOS &nbsp; • &nbsp; DISQUE 129 &nbsp; • &nbsp; JUSTIÇA GRATUITA E INTEGRAL
         </div>
     </div>
 
     <script>
-        // 3. PROTEÇÃO JS: Bloqueia atalhos de teclado e mouse
+        // PROTEÇÃO CONTRA ZOOM
         document.addEventListener('keydown', function(e) {
-            // Bloqueia Ctrl +, Ctrl -, Ctrl 0 (Zoom)
-            if (e.ctrlKey && (
-                e.key === '+' || e.key === '-' || e.key === '0' ||
-                e.keyCode === 187 || e.keyCode === 189 || e.keyCode === 107 || e.keyCode === 109
-            )) {
+            if (e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '0' || e.keyCode === 187 || e.keyCode === 189 || e.keyCode === 107 || e.keyCode === 109)) {
                 e.preventDefault();
             }
         });
-
-        // Bloqueia Ctrl + Scroll do Mouse
-        document.addEventListener('wheel', function(e) {
-            if (e.ctrlKey) {
-                e.preventDefault();
-            }
-        }, { passive: false });
-
-        // Bloqueia Pinch-to-zoom (caso o CSS falhe em algum browser antigo)
-        document.addEventListener('gesturestart', function(e) {
-            e.preventDefault();
-        });
+        document.addEventListener('wheel', function(e) { if (e.ctrlKey) { e.preventDefault(); } }, { passive: false });
+        document.addEventListener('gesturestart', function(e) { e.preventDefault(); });
 
 
         function reiniciarSistema() {
@@ -329,6 +301,7 @@
             setTimeout(function() { location.reload(true); }, 500);
         }
 
+        // --- RELÓGIO ---
         function updateClock() {
             const now = new Date();
             const timeString = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
@@ -340,11 +313,10 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // --- LÓGICA DO CARROSSEL DE TEXTO (FOOTER) ---
+        // --- MENSAGENS DA PÍLULA ---
         const mensagens = [
             "<span class='info-icon'>⚖️</span> Garantimos assistência jurídica gratuita",
             "<span class='info-icon'>📞</span> Dúvidas? Ligue para o Disque 129"
-            
         ];
         let msgIndex = 0;
         function rotacionarMensagens() {
@@ -361,30 +333,23 @@
         }
         setInterval(rotacionarMensagens, 6000);
 
-        // --- LÓGICA DO CARROSSEL DE IMAGENS (CENTRAL) ---
+        // --- ROTAÇÃO DE FOTOS ---
         const imageCarousel = document.getElementById('main-image-carousel');
         const images = imageCarousel.getElementsByTagName('img');
         let imgIndex = 0;
 
         function rotacionarImagens() {
-            // Remove a classe ativa da imagem atual
             images[imgIndex].classList.remove('active-image');
-            
-            // Incrementa o índice (volta ao zero se chegar no fim)
             imgIndex = (imgIndex + 1) % images.length;
-            
-            // Adiciona a classe ativa na próxima imagem
             images[imgIndex].classList.add('active-image');
         }
-        // Troca de imagem a cada 8 segundos (8000ms)
-        setInterval(rotacionarImagens, 7000); 
+        setInterval(rotacionarImagens, 6000); 
 
-
+        // --- AHK GATILHO ---
         function abrirSGA() {
             document.title = "::: ABRIR_SGA :::";
             setTimeout(function() { document.title = "Totem DPE-MA"; }, 3000);
         }
-
     </script>
 </body>
 </html>
